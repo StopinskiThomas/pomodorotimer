@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #f4f4f4;
+  color: #333;
+}
+
+main {
+  margin-top: 50px;
+}
+
+.timer {
+  font-size: 4rem;
+  margin: 20px 0;
+}
+
+.controls button {
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  cursor: pointer;
+}
