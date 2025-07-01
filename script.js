@@ -1,4 +1,4 @@
-    const workDuration = 25 * 60;  // 25 Minuten
+const workDuration = 25 * 60;  // 25 Minuten
 const breakDuration = 5 * 60;  // 5 Minuten
 let timeLeft = workDuration;
 let isWorkSession = true;
@@ -9,8 +9,10 @@ const minutesEl = document.getElementById("minutes");
 const secondsEl = document.getElementById("seconds");
 const sessionCounterEl = document.getElementById("sessionCounter");
 const startButton = document.getElementById("startButton");
-const startSound = document.getElementById("startSound");
-const endSound = document.getElementById("endSound");
+
+// Sounds dynamisch erzeugen
+const startSound = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+const endSound = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
 
 function updateDisplay() {
   const mins = String(Math.floor(timeLeft / 60)).padStart(2, "0");
@@ -19,14 +21,16 @@ function updateDisplay() {
   secondsEl.textContent = secs;
 }
 
-function playSound(audioEl) {
-  audioEl.currentTime = 0;
-  audioEl.play();
+function playSound(audioObj) {
+  audioObj.currentTime = 0;
+  audioObj.play().catch(e => {
+    console.warn("Audio konnte nicht abgespielt werden:", e);
+  });
 }
 
 function startTimer() {
-  playSound(startSound);
   updateDisplay();
+  playSound(startSound);
 
   timerInterval = setInterval(() => {
     timeLeft--;
@@ -56,6 +60,11 @@ startButton.addEventListener("click", () => {
   if (timerInterval) {
     clearInterval(timerInterval);
   }
+
+  // Sounds freischalten: kurz abspielen + sofort pausieren
+  startSound.play().then(() => startSound.pause());
+  endSound.play().then(() => endSound.pause());
+
   isWorkSession = true;
   timeLeft = workDuration;
   updateDisplay();
